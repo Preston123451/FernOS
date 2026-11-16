@@ -1,0 +1,5 @@
+build/work/
+build/out/
+*.iso
+*.iso.sig
+*.log
