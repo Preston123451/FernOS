@@ -1,0 +1,12 @@
+# Keep FernOS identity in /usr/lib/os-release after 'filesystem' installs or upgrades.
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = filesystem
+Target = fernos-desktop-settings
+
+[Action]
+Description = Applying FernOS os-release...
+When = PostTransaction
+Exec = /usr/share/libalpm/scripts/fernos-os-release

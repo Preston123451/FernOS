@@ -1,0 +1,9 @@
+[Desktop Entry]
+DefaultProfile=Fern.profile
+
+[KonsoleWindow]
+RememberWindowSize=true
+
+[TabBar]
+CloseTabOnMiddleMouseButton=true
+NewTabButton=true

@@ -1,0 +1,11 @@
+# Turn the firewall on (deny incoming, allow outgoing) when ufw is first installed.
+# Only runs on Install, so a user who later disables ufw is never overridden.
+[Trigger]
+Operation = Install
+Type = Package
+Target = ufw
+
+[Action]
+Description = Enabling FernOS firewall defaults...
+When = PostTransaction
+Exec = /usr/bin/sed -i -e "s/^ENABLED=no/ENABLED=yes/" /etc/ufw/ufw.conf

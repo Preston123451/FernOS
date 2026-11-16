@@ -1,0 +1,6 @@
+#!/bin/sh
+# Install the FernOS os-release over the one shipped by the 'filesystem' package.
+# /etc/os-release is a symlink to it, so both paths report FernOS.
+set -e
+[ -f /usr/share/fernos/os-release ] || exit 0
+install -m 0644 /usr/share/fernos/os-release /usr/lib/os-release

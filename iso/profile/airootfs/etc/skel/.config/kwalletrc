@@ -1,0 +1,4 @@
+[Wallet]
+# Live session: no wallet prompts.
+Enabled=false
+First Use=false

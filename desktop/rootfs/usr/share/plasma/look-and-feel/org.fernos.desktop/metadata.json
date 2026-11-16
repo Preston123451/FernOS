@@ -1,0 +1,17 @@
+{
+    "KPackageStructure": "Plasma/LookAndFeel",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "FernOS Project"
+            }
+        ],
+        "Category": "",
+        "Description": "A calmer way to use the internet.",
+        "Id": "org.fernos.desktop",
+        "License": "GPL-2.0-or-later",
+        "Name": "FernOS",
+        "Version": "0.1"
+    },
+    "X-Plasma-APIVersion": "2"
+}

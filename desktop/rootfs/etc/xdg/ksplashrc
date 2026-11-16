@@ -1,0 +1,4 @@
+[KSplash]
+# FernOS has no custom splash yet; skip Breeze's so login goes straight to the desktop.
+Engine=none
+Theme=None

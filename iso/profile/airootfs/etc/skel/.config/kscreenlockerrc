@@ -1,0 +1,4 @@
+[Daemon]
+# Live session: the user has no password, so never lock the screen.
+Autolock=false
+LockOnResume=false

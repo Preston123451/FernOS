@@ -1,0 +1,26 @@
+# Applied when the user picks "FernOS" in System Settings > Global Theme.
+# Components not provided here (splash, lock screen, logout) fall back to Breeze.
+[kdeglobals][KDE]
+widgetStyle=Breeze
+
+[kdeglobals][General]
+ColorScheme=FernLight
+
+[kdeglobals][Icons]
+Theme=breeze
+
+[plasmarc][Theme]
+name=default
+
+[Wallpaper]
+Image=Fern
+
+[kcminputrc][Mouse]
+cursorTheme=breeze_cursors
+
+[kwinrc][WindowSwitcher]
+LayoutName=org.kde.breeze.desktop
+
+[kwinrc][org.kde.kdecoration2]
+library=org.kde.breeze
+theme=Breeze

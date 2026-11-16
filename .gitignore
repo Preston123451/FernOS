@@ -1,5 +1,7 @@
-build/work/
-build/out/
+# Everything produced by scripts/ lives under build/ and is never committed.
+build/*
+!build/.gitkeep
 *.iso
 *.iso.sig
 *.log
+__pycache__/

@@ -1,0 +1,8 @@
+NAME="FernOS"
+PRETTY_NAME="FernOS"
+ID=fernos
+ID_LIKE=arch
+BUILD_ID=rolling
+VERSION="0.1 (development)"
+ANSI_COLOR="38;2;130;150;107"
+LOGO=fernos

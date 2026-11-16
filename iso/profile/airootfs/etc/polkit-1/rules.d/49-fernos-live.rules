@@ -1,0 +1,7 @@
+// LIVE ISO ONLY: let the live user ("fern", in wheel) manage the system
+// (networks, disks, settings) without a password prompt it cannot answer.
+polkit.addRule(function (action, subject) {
+    if (subject.user == "fern" && subject.isInGroup("wheel")) {
+        return polkit.Result.YES;
+    }
+});

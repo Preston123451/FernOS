@@ -1,0 +1,11 @@
+# FernOS service defaults. Applied on installed systems with 'systemctl preset-all'.
+# The live ISO enables the same units with symlinks in iso/profile/airootfs.
+enable sddm.service
+enable NetworkManager.service
+enable bluetooth.service
+enable ufw.service
+enable power-profiles-daemon.service
+enable systemd-timesyncd.service
+enable fstrim.timer
+disable systemd-networkd.service
+disable iwd.service

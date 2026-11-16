@@ -1,0 +1,63 @@
+# Maintainer: FernOS Project
+#
+# FernOS desktop defaults and branding. Built from files in this repository
+# (desktop/rootfs and branding/dist), not from downloaded sources.
+# Shared by the live ISO and installed systems, so both look and behave the same.
+
+pkgname=fernos-desktop-settings
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="FernOS branding, Plasma/Konsole/SDDM defaults and system presets"
+arch=('any')
+license=('GPL-2.0-or-later')
+depends=('plasma-desktop' 'breeze' 'konsole' 'sddm' 'ttf-hack')
+optdepends=('fish: FernOS prompt and colors'
+            'ufw: firewall enabled by default on install')
+conflicts=('deepin-kwin')  # also ships /etc/xdg/kdeglobals and /etc/xdg/kwinrc
+backup=('etc/xdg/kdeglobals'
+        'etc/xdg/kwinrc'
+        'etc/xdg/konsolerc'
+        'etc/xdg/kscreenlockerrc'
+        'etc/xdg/ksplashrc'
+        'etc/xdg/dolphinrc'
+        'etc/sddm.conf.d/20-fernos-theme.conf'
+        'usr/share/sddm/themes/breeze/theme.conf.user')
+
+_repo="$(realpath "${startdir}/../..")"
+
+package() {
+    cp -a --no-preserve=ownership "${_repo}/desktop/rootfs/." "${pkgdir}/"
+    chmod 0755 "${pkgdir}/usr/share/libalpm/scripts/fernos-os-release"
+
+    local dist="${_repo}/branding/dist"
+
+    # Icons: "fernos" is the logo (os-release LOGO=, launcher icon).
+    install -Dm644 "${dist}/icons/fernos.svg" "${pkgdir}/usr/share/icons/hicolor/scalable/apps/fernos.svg"
+    install -Dm644 "${dist}/icons/fernos-badge.svg" "${pkgdir}/usr/share/icons/hicolor/scalable/apps/fernos-badge.svg"
+    local s
+    for s in 16 22 24 32 48 64 128 256; do
+        install -Dm644 "${dist}/icons/fernos-${s}.png" "${pkgdir}/usr/share/icons/hicolor/${s}x${s}/apps/fernos.png"
+    done
+    install -Dm644 "${dist}/icons/fernos.svg" "${pkgdir}/usr/share/pixmaps/fernos.svg"
+
+    # Wallpaper package "Fern" (light + dark variants).
+    install -d "${pkgdir}/usr/share/wallpapers/Fern"
+    cp -r --no-preserve=ownership "${dist}/wallpaper/contents" "${pkgdir}/usr/share/wallpapers/Fern/"
+    install -Dm644 /dev/stdin "${pkgdir}/usr/share/wallpapers/Fern/metadata.json" <<'JSON'
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "FernOS Project"
+            }
+        ],
+        "Id": "Fern",
+        "License": "CC-BY-SA-4.0",
+        "Name": "Fern"
+    }
+}
+JSON
+
+    find "${pkgdir}" -type d -exec chmod 0755 {} +
+    find "${pkgdir}" -type f ! -path '*/libalpm/scripts/*' -exec chmod 0644 {} +
+}
