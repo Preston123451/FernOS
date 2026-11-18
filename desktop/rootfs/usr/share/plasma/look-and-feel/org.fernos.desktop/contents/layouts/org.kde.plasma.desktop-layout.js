@@ -25,10 +25,19 @@ var tasks = panel.addWidget("org.kde.plasma.icontasks");
 tasks.currentConfigGroup = ["General"];
 tasks.writeConfig("launchers", [
     "applications:org.kde.dolphin.desktop",
-    "applications:firefox.desktop",
+    "applications:zen.desktop",
     "applications:org.kde.konsole.desktop",
+    "applications:code-oss.desktop",
+    "applications:steam.desktop",
+    "applications:fernblox.desktop",
     "applications:org.kde.systemsettings.desktop"
 ]);
+
+// One-click Game Mode / Work Mode switcher (fernos-modes).
+// Left click opens the chooser; right click lists Game / Work / Normal directly.
+var modes = panel.addWidget("org.kde.plasma.icon");
+modes.currentConfigGroup = ["General"];
+modes.writeConfig("url", "file:///usr/share/applications/org.fernos.modes.desktop");
 
 panel.addWidget("org.kde.plasma.marginsseparator");
 panel.addWidget("org.kde.plasma.systemtray");

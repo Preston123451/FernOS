@@ -1,0 +1,25 @@
+[Desktop Entry]
+Type=Application
+Name=FernOS Modes
+GenericName=Game / Work Mode
+Comment=Switch between Game Mode, Work Mode and Normal
+Exec=fernos-mode menu
+Icon=fernos
+Categories=Settings;
+Keywords=game;gaming;work;focus;performance;mode;pomodoro;
+Actions=game;work;normal;
+
+[Desktop Action game]
+Name=Game Mode
+Icon=input-gaming
+Exec=fernos-mode game
+
+[Desktop Action work]
+Name=Work Mode
+Icon=view-calendar-tasks
+Exec=fernos-mode work
+
+[Desktop Action normal]
+Name=Normal Mode
+Icon=fernos
+Exec=fernos-mode normal

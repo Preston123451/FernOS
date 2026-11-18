@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Game Mode
+Comment=Max performance, effects off, night theme
+Exec=fernos-mode game
+Icon=input-gaming
+Categories=Settings;
+Keywords=fernos;mode;

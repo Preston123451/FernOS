@@ -1,0 +1,10 @@
+# FernOS default applications (system-wide; users override in ~/.config/mimeapps.list).
+[Default Applications]
+x-scheme-handler/http=zen.desktop
+x-scheme-handler/https=zen.desktop
+x-scheme-handler/about=zen.desktop
+x-scheme-handler/unknown=zen.desktop
+text/html=zen.desktop
+application/xhtml+xml=zen.desktop
+application/pdf=org.kde.okular.desktop
+inode/directory=org.kde.dolphin.desktop

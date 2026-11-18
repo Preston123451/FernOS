@@ -37,3 +37,4 @@ rsvg-convert -w 853 "${here}/wallpaper/fern-dark.svg" \
     | magick - -gravity center -extent 640x480 -strip -define png:exclude-chunks=date,time \
         "${dist}/boot/splash.png"
 echo "Rendered assets into ${dist}"
+"${here}/tools/render-mode-wallpapers.sh"

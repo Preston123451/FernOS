@@ -1,0 +1,8 @@
+[Unit]
+Description=FernOS Game Mode: keep Feral GameMode active
+PartOf=graphical-session.target
+
+[Service]
+# Requests GameMode for this process and waits; stopping the unit ends it.
+ExecStart=/usr/bin/gamemoded -r
+Restart=no

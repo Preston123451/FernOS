@@ -1,0 +1,43 @@
+# Maintainer: FernOS Project
+#
+# FernOS Game Mode / Work Mode switcher (fernos-mode), the Work Mode focus
+# timer, and the mode wallpapers. Built from files in this repository
+# (modes/ and branding/dist), not from downloaded sources.
+
+pkgname=fernos-modes
+pkgver=0.2.0
+pkgrel=1
+pkgdesc="FernOS Game Mode and Work Mode: one-click performance, theme and focus switching"
+arch=('any')
+license=('GPL-2.0-or-later')
+depends=('python' 'kconfig' 'glib2' 'plasma-workspace' 'power-profiles-daemon'
+         'gamemode' 'libnotify' 'kdialog' 'fernos-desktop-settings')
+
+_repo="$(realpath "${startdir}/../..")"
+
+package() {
+    cp -a --no-preserve=ownership "${_repo}/modes/." "${pkgdir}/"
+    find "${pkgdir}" -name __pycache__ -prune -exec rm -rf {} +
+
+    local name id
+    for name in night:FernNight mist:FernMist; do
+        id="${name#*:}"
+        install -d "${pkgdir}/usr/share/wallpapers/${id}"
+        cp -r --no-preserve=ownership "${_repo}/branding/dist/wallpaper-${name%%:*}/contents" \
+            "${pkgdir}/usr/share/wallpapers/${id}/"
+        install -Dm644 /dev/stdin "${pkgdir}/usr/share/wallpapers/${id}/metadata.json" <<JSON
+{
+    "KPlugin": {
+        "Authors": [ { "Name": "FernOS Project" } ],
+        "Id": "${id}",
+        "License": "CC-BY-SA-4.0",
+        "Name": "${id/Fern/Fern }"
+    }
+}
+JSON
+    done
+
+    find "${pkgdir}" -type d -exec chmod 0755 {} +
+    find "${pkgdir}" -type f -exec chmod 0644 {} +
+    chmod 0755 "${pkgdir}/usr/bin/"*
+}

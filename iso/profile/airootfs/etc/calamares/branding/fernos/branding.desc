@@ -1,0 +1,33 @@
+---
+componentName:  fernos
+
+welcomeStyleCalamares:   false
+welcomeExpandingLogo:   true
+windowExpanding:    normal
+windowSize: 1100px,620px
+windowPlacement: center
+sidebar: widget
+navigation: widget
+
+strings:
+    productName:         FernOS
+    shortProductName:    FernOS
+    version:             0.2
+    shortVersion:        0.2
+    versionedName:       FernOS 0.2
+    shortVersionedName:  FernOS 0.2
+    bootloaderEntryName: FernOS
+
+images:
+    productLogo:         "logo.png"
+    productIcon:         "icon.png"
+    productWelcome:      "welcome.png"
+
+style:
+   SidebarBackground:        "#18271F"
+   SidebarText:              "#EDE8D8"
+   SidebarTextCurrent:       "#18271F"
+   SidebarBackgroundCurrent: "#9BAE7D"
+
+slideshow:               "show.qml"
+slideshowAPI: 2

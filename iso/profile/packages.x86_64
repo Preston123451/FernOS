@@ -49,7 +49,6 @@ less
 lftp
 libfido2
 libusb-compat
-linux
 linux-firmware
 linux-firmware-marvell
 livecd-sounds
@@ -167,7 +166,6 @@ okular
 kcalc
 plasma-browser-integration
 
-firefox
 
 ttf-hack
 
@@ -198,3 +196,46 @@ base-devel
 spice-vdagent
 
 fernos-desktop-settings
+# --- CachyOS base ---
+linux-cachyos
+cachyos-keyring
+cachyos-mirrorlist
+# --- Installer (Calamares, offline install of this live system) ---
+cachyos-calamares
+# --- Browser ---
+zen-browser-bin
+# --- Coding ---
+code
+claude-code
+python
+python-pip
+rust
+nodejs
+npm
+clang
+cmake
+gdb
+# --- Gaming ---
+steam
+lutris
+heroic-games-launcher
+discord
+mangohud
+lib32-mangohud
+gamemode
+lib32-gamemode
+lib32-mesa
+lib32-vulkan-intel
+lib32-vulkan-radeon
+lib32-vulkan-nouveau
+flatpak
+# --- Tools ---
+os-prober
+zram-generator
+shelly
+kdialog
+libnotify
+# --- FernOS / Fern apps (local [fernos] repo) ---
+fernos-modes
+fern
+fernblox

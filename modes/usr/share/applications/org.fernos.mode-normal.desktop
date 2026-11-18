@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Normal Mode
+Comment=Back to your usual setup
+Exec=fernos-mode normal
+Icon=fernos
+Categories=Settings;
+Keywords=fernos;mode;

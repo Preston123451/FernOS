@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Work Mode
+Comment=Calm theme, focus timer, quiet CPU
+Exec=fernos-mode work
+Icon=view-calendar-tasks
+Categories=Settings;
+Keywords=fernos;mode;

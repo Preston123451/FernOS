@@ -1,0 +1,7 @@
+[Unit]
+Description=FernOS Work Mode focus timer (Pomodoro)
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/fernos-focus
+Restart=no

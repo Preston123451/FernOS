@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Install FernOS
+Comment=Install FernOS on this computer
+Exec=/usr/local/bin/fernos-install
+Icon=fernos
+Terminal=false
+Categories=System;
+Keywords=installer;calamares;install;

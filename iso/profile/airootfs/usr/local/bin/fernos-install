@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# LIVE ISO ONLY: start the FernOS installer (Calamares) as root.
+# -E keeps WAYLAND_DISPLAY/XDG_RUNTIME_DIR so the window opens on the live desktop.
+# Debug log: /root/.cache/calamares/session.log
+exec sudo -E /usr/bin/calamares -d "$@"

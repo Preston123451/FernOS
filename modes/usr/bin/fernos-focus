@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+"""fernos-focus: a simple Pomodoro focus timer for FernOS Work Mode.
+
+Runs as the user service fernos-focus.service (started by `fernos-mode work`,
+stopped by any other mode). Sends a desktop notification at every change.
+
+  FERNOS_FOCUS_MINUTES   focus block length   (default 25)
+  FERNOS_BREAK_MINUTES   short break length   (default 5)
+  FERNOS_LONG_BREAK      long break, every 4th (default 15)
+"""
+import os
+import shutil
+import subprocess
+import time
+
+
+def minutes(name, default):
+    try:
+        return max(1, int(os.environ.get(name, default)))
+    except ValueError:
+        return default
+
+
+def notify(title, body, icon):
+    if shutil.which("notify-send"):
+        subprocess.run(["notify-send", "--app-name=FernOS Focus", f"--icon={icon}", title, body],
+                       check=False)
+    print(f"{title}: {body}", flush=True)
+
+
+def main():
+    focus = minutes("FERNOS_FOCUS_MINUTES", 25)
+    short = minutes("FERNOS_BREAK_MINUTES", 5)
+    long_ = minutes("FERNOS_LONG_BREAK", 15)
+    block = 0
+    while True:
+        block += 1
+        notify(f"Focus block {block}", f"Focus for {focus} minutes. You've got this.", "fernos")
+        time.sleep(focus * 60)
+        rest = long_ if block % 4 == 0 else short
+        notify("Break time", f"Step away for {rest} minutes: stretch, water, eyes off the screen.",
+               "fernos")
+        time.sleep(rest * 60)
+
+
+if __name__ == "__main__":
+    main()

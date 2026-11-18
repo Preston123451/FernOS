@@ -1,0 +1,278 @@
+#!/usr/bin/env python3
+"""fernos-mode: switch FernOS between Game, Work and Normal mode.
+
+  fernos-mode game     performance CPU + Feral GameMode, effects off, dark night theme
+  fernos-mode work     balanced/power-saver CPU, calm light theme, focus timer
+  fernos-mode normal   undo everything and restore your own theme and wallpaper
+  fernos-mode menu     pick a mode from a dialog (what the panel button runs)
+  fernos-mode status   print the current mode
+
+Everything is per user and undoable: the theme, wallpaper and effect settings you
+had before entering a mode are saved and put back by "normal".
+"""
+import json
+import os
+import shutil
+import subprocess
+import sys
+from pathlib import Path
+
+MODES = ("game", "work", "normal")
+LABELS = {"game": "Game Mode", "work": "Work Mode", "normal": "Normal"}
+ICONS = {"game": "input-gaming", "work": "fernos", "normal": "fernos"}
+
+WALLPAPERS = {
+    "game": "/usr/share/wallpapers/FernNight/",
+    "work": "/usr/share/wallpapers/FernMist/",
+}
+COLORS = {"game": "FernDark", "work": "FernLight"}
+
+# kwin effects switched off in Game Mode: (file, group, key, game value)
+EFFECT_KEYS = [
+    ("kwinrc", "Plugins", "blurEnabled", "false"),
+    ("kwinrc", "Plugins", "contrastEnabled", "false"),
+    ("kwinrc", "Plugins", "slidingpopupsEnabled", "false"),
+    ("kwinrc", "Plugins", "kwin4_effect_translucencyEnabled", "false"),
+    ("kdeglobals", "KDE", "AnimationDurationFactor", "0"),
+]
+
+STATE_FILE = Path(os.environ.get("XDG_STATE_HOME", Path.home() / ".local/state")) / "fernos" / "mode.json"
+
+
+# ---------------------------------------------------------------- helpers
+
+def run(*cmd, check=False):
+    if not shutil.which(cmd[0]):
+        return None
+    try:
+        return subprocess.run(cmd, capture_output=True, text=True, timeout=30, check=check)
+    except (subprocess.SubprocessError, OSError):
+        return None
+
+
+def out(*cmd):
+    r = run(*cmd)
+    return r.stdout.strip() if r and r.returncode == 0 else ""
+
+
+def notify(title, body, icon="fernos"):
+    run("notify-send", "--app-name=FernOS", f"--icon={icon}", title, body)
+
+
+def load_state():
+    try:
+        return json.loads(STATE_FILE.read_text())
+    except (OSError, ValueError):
+        return {"mode": "normal"}
+
+
+def save_state(state):
+    STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    STATE_FILE.write_text(json.dumps(state, indent=2))
+
+
+def kread(file, group, key):
+    r = run("kreadconfig6", "--file", file, "--group", group, "--key", key)
+    if r is None or r.returncode != 0:
+        return None
+    value = r.stdout.rstrip("\n")
+    return value if value != "" else None
+
+
+def kwrite(file, group, key, value):
+    if value is None:
+        run("kwriteconfig6", "--file", file, "--group", group, "--key", key, "--delete")
+    else:
+        run("kwriteconfig6", "--file", file, "--group", group, "--key", key, value)
+
+
+def plasma_script(script):
+    """Run a Plasma desktop script; returns its print() output."""
+    r = run("gdbus", "call", "--session", "--dest", "org.kde.plasmashell",
+            "--object-path", "/PlasmaShell",
+            "--method", "org.kde.PlasmaShell.evaluateScript", script)
+    if r is None or r.returncode != 0:
+        return None
+    text = r.stdout.strip()
+    # gdbus prints a tuple like ('output',)
+    if text.startswith("('") and text.endswith("',)"):
+        text = text[2:-3].encode().decode("unicode_escape")
+    return text
+
+
+def get_wallpaper():
+    text = plasma_script(
+        'var d = desktops()[0];'
+        'd.currentConfigGroup = ["Wallpaper", "org.kde.image", "General"];'
+        'print(d.wallpaperPlugin + "|" + d.readConfig("Image"));'
+    )
+    if not text or "|" not in text:
+        return None
+    plugin, image = text.strip().split("|", 1)
+    return {"plugin": plugin, "image": image}
+
+
+def set_wallpaper(image, plugin="org.kde.image"):
+    image = image.replace("\\", "\\\\").replace('"', '\\"')
+    ok = plasma_script(
+        'var ds = desktops();'
+        'for (var i = 0; i < ds.length; i++) {'
+        f'  ds[i].wallpaperPlugin = "{plugin}";'
+        '  ds[i].currentConfigGroup = ["Wallpaper", "org.kde.image", "General"];'
+        f'  ds[i].writeConfig("Image", "{image}");'
+        '}'
+    )
+    if ok is None and plugin == "org.kde.image":
+        run("plasma-apply-wallpaperimage", image.removeprefix("file://"))
+
+
+def set_colors(scheme):
+    if scheme:
+        run("plasma-apply-colorscheme", scheme)
+
+
+def kwin_reconfigure():
+    run("gdbus", "call", "--session", "--dest", "org.kde.KWin",
+        "--object-path", "/KWin", "--method", "org.kde.KWin.reconfigure")
+
+
+def on_battery():
+    for supply in Path("/sys/class/power_supply").glob("*"):
+        try:
+            if (supply / "type").read_text().strip() == "Mains":
+                return (supply / "online").read_text().strip() == "0"
+        except OSError:
+            continue
+    return False
+
+
+def power_profile(profile):
+    r = run("powerprofilesctl", "set", profile)
+    if r is None or r.returncode != 0:
+        if profile == "performance":
+            # Not every CPU/driver offers a performance profile.
+            run("powerprofilesctl", "set", "balanced")
+        return False
+    return True
+
+
+def user_service(action, unit):
+    run("systemctl", "--user", action, unit)
+
+
+# ---------------------------------------------------------------- modes
+
+def save_personal_look(state):
+    """Remember the user's own look the first time they leave Normal."""
+    if "saved" in state:
+        return
+    state["saved"] = {
+        "colorscheme": kread("kdeglobals", "General", "ColorScheme"),
+        "wallpaper": get_wallpaper(),
+        "effects": {f"{f}/{g}/{k}": kread(f, g, k) for f, g, k, _ in EFFECT_KEYS},
+    }
+
+
+def restore_effects(state):
+    saved = state.get("saved", {}).get("effects", {})
+    for f, g, k, _ in EFFECT_KEYS:
+        kwrite(f, g, k, saved.get(f"{f}/{g}/{k}"))
+
+
+def enter(mode):
+    state = load_state()
+    previous = state.get("mode", "normal")
+
+    if mode != "normal":
+        save_personal_look(state)
+
+    # Leave whatever was running before.
+    user_service("stop", "fernos-gamemode.service")
+    if mode != "work":
+        user_service("stop", "fernos-focus.service")
+
+    if mode == "game":
+        perf = power_profile("performance")
+        user_service("start", "fernos-gamemode.service")
+        for f, g, k, value in EFFECT_KEYS:
+            kwrite(f, g, k, value)
+        kwin_reconfigure()
+        set_colors(COLORS["game"])
+        set_wallpaper("file://" + WALLPAPERS["game"])
+        notify("Game Mode on",
+               "Performance CPU" + ("" if perf else " (not supported here, using balanced)")
+               + ", GameMode active, desktop effects off.", ICONS["game"])
+
+    elif mode == "work":
+        profile = "power-saver" if on_battery() else "balanced"
+        power_profile(profile)
+        restore_effects(state)
+        kwin_reconfigure()
+        set_colors(COLORS["work"])
+        set_wallpaper("file://" + WALLPAPERS["work"])
+        user_service("start", "fernos-focus.service")
+        notify("Work Mode on",
+               f"{profile.replace('-', ' ').capitalize()} CPU, calm theme. "
+               "Focus timer started: 25 min focus, 5 min break.", ICONS["work"])
+
+    else:  # normal
+        power_profile("balanced")
+        restore_effects(state)
+        kwin_reconfigure()
+        saved = state.pop("saved", {})
+        set_colors(saved.get("colorscheme") or "FernLight")
+        wp = saved.get("wallpaper")
+        if wp and wp.get("image"):
+            set_wallpaper(wp["image"], wp.get("plugin") or "org.kde.image")
+        else:
+            set_wallpaper("file:///usr/share/wallpapers/Fern/")
+        if previous != "normal":
+            notify("Back to Normal", "Your own theme, wallpaper and effects are restored.")
+
+    state["mode"] = mode
+    save_state(state)
+    print(f"FernOS: {LABELS[mode]}")
+
+
+def menu():
+    current = load_state().get("mode", "normal")
+    if not shutil.which("kdialog"):
+        print("kdialog is not installed; use: fernos-mode game|work|normal", file=sys.stderr)
+        return 1
+    args = ["kdialog", "--title", "FernOS Modes", "--icon", "fernos",
+            "--radiolist", "Choose how FernOS should behave:"]
+    descriptions = {
+        "game": "🎮  Game Mode: max performance, effects off, night theme",
+        "work": "💼  Work Mode: calm theme, focus timer, quiet CPU",
+        "normal": "🌿  Normal: your usual setup",
+    }
+    for m in MODES:
+        args += [m, descriptions[m], "on" if m == current else "off"]
+    r = run(*args)
+    if r is None or r.returncode != 0 or not r.stdout.strip():
+        return 0
+    choice = r.stdout.strip()
+    if choice in MODES:
+        enter(choice)
+    return 0
+
+
+def main(argv):
+    cmd = argv[1] if len(argv) > 1 else "menu"
+    if cmd in MODES:
+        enter(cmd)
+        return 0
+    if cmd == "menu":
+        return menu()
+    if cmd == "status":
+        print(load_state().get("mode", "normal"))
+        return 0
+    if cmd == "toggle":
+        enter("normal" if load_state().get("mode") == "game" else "game")
+        return 0
+    print(__doc__.strip(), file=sys.stderr)
+    return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))
