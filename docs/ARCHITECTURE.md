@@ -90,7 +90,7 @@ fish prompt and colors in `/etc/fish/`; users override them in `~/.config/fish`.
 
 ## ADR-11: Installer = Calamares, offline (copy the live system)
 CachyOS's `cachyos-calamares` with FernOS's own configuration in
-`iso/profile/airootfs/etc/calamares` (live ISO only). The `unpackfs` module copies
+`iso/profile/airootfs/usr/share/fernos/calamares` (live ISO only; `fernos-install` copies it over the package defaults in `/etc/calamares` at launch, since shipping it there directly would conflict with the package files). The `unpackfs` module copies
 the live squashfs, so the installed system is exactly the live system: same apps,
 same look, no internet needed. `shellprocess@cleanup` then removes every live-only
 file (NOPASSWD sudo, polkit rule, autologin, archiso hooks and services, live skel
