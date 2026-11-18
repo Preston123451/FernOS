@@ -1,0 +1,6 @@
+# FernOS: keeps the NVIDIA driver only on PCs that have an NVIDIA graphics card.
+---
+type:       "job"
+name:       "fernosgpu"
+interface:  "python"
+script:     "main.py"

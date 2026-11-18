@@ -13,6 +13,7 @@ run on any 64-bit PC) and is built reproducibly with
   effects off + night theme, or calm theme + focus timer + quiet CPU).
 * **Zen Browser**, Code-OSS, Claude Code, Steam, Lutris, Heroic, Discord,
   MangoHud, Shelly, Fern and Fernblox preinstalled; fish shell.
+* **NVIDIA driver included** (580xx: GTX 900/10-series up to RTX 40), kept only on PCs with an NVIDIA card.
 * **Graphical installer** (Calamares): installs the live system as-is, no internet needed.
 
 > **Status: 0.2, in development.** See [docs/ROADMAP.md](docs/ROADMAP.md) and the honest test status

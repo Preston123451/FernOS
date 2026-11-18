@@ -75,12 +75,18 @@ through the stub `resolv.conf`.
   rules live in `airootfs/` and never reach installed systems.
 * Removed `cloud-init` (VM provisioning). It isn't useful on a desktop and slowed boot.
 
-## ADR-9: Graphics: open drivers on the live ISO, "safe graphics" entry
-The live ISO ships Mesa (Intel/AMD/nouveau + NVK Vulkan) and VA-API drivers.
-Proprietary NVIDIA (`nvidia-open`) is *not* on the live ISO: it replaces
-nouveau for all NVIDIA cards and does not support older GPUs. It will be
-an installer option (0.3). Boot menus have a **safe graphics** (`nomodeset`)
-entry for both BIOS and UEFI.
+## ADR-9: Graphics: Mesa + NVIDIA 580xx, "safe graphics" entry
+The ISO ships Mesa (Intel/AMD/nouveau + NVK Vulkan), VA-API drivers and the
+proprietary **NVIDIA 580xx** driver, prebuilt for the kernel
+(`linux-cachyos-nvidia-580xx`, no DKMS). 580xx is the last series supporting
+GeForce 900/10-series (Maxwell/Pascal, e.g. GTX 1080) and also covers
+16/20/30/40-series; the current `nvidia-open` drops pre-Turing cards. It loads
+only on NVIDIA hardware (its modprobe config blacklists nouveau).
+The installer job `fernosgpu` removes the driver from the installed system when
+the PC has no NVIDIA display device. Not covered: RTX 50-series (Blackwell needs
+the open modules) - such PCs fall back to basic graphics until `nvidia-open` is
+installed. Boot menus have a **safe graphics** (`nomodeset`) entry for both BIOS
+and UEFI.
 Plasma 6 on current Arch has no X11 session package, so there is no X11
 desktop fallback. The SDDM greeter itself runs on X11 (sddm depends on xorg-server).
 
