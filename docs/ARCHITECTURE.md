@@ -121,4 +121,4 @@ Coding: Code-OSS (`code`, Open VSX marketplace), Claude Code, git, Python, Rust,
 Node.js/npm, clang, cmake, gdb, base-devel. Gaming: Steam, Lutris, Heroic, Discord,
 MangoHud, GameMode, Flatpak (for Sober). Software center: Shelly. Fern ecosystem:
 `fern` and `fernblox` packages. Compressed RAM swap via `zram-generator`
-(`/usr/lib/systemd/zram-generator.conf`: half of RAM, max 8 GiB, zstd).
+(`/etc/systemd/zram-generator.conf`: half of RAM, max 8 GiB, zstd).

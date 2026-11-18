@@ -23,6 +23,7 @@ backup=('etc/xdg/kdeglobals'
         'etc/sddm.conf.d/20-fernos-theme.conf'
         'etc/xdg/mimeapps.list'
         'etc/xdg/kwalletrc'
+        'etc/systemd/zram-generator.conf'
         'usr/share/sddm/themes/breeze/theme.conf.user')
 
 _repo="$(realpath "${startdir}/../..")"
