@@ -1,0 +1,46 @@
+// FernOS fastfetch defaults (shown when a terminal opens).
+// Your own ~/.config/fastfetch/config.jsonc takes precedence.
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  "logo": {
+    "type": "file",
+    "source": "/usr/share/fernos/fastfetch/fernos-tree.txt",
+    "color": {
+      "1": "38;2;155;174;125",
+      "2": "38;2;201;214;160",
+      "3": "38;2;140;106;75"
+    },
+    "padding": { "top": 1, "left": 1, "right": 3 }
+  },
+  "display": {
+    "separator": "  ",
+    "color": { "keys": "38;2;155;174;125", "title": "38;2;201;214;160", "separator": "38;2;120;134;116" },
+    "key": { "width": 11 }
+  },
+  "modules": [
+    {
+      "type": "custom",
+      "format": "\u001b[1;38;2;201;214;160mFernOS\u001b[0;38;2;184;185;165m · calm for coding, working and gaming"
+    },
+    "title",
+    "separator",
+    { "type": "os", "key": "󰌪 OS" },
+    { "type": "kernel", "key": " Kernel" },
+    { "type": "uptime", "key": "󰅐 Uptime" },
+    { "type": "packages", "key": "󰏖 Packages" },
+    { "type": "shell", "key": " Shell" },
+    { "type": "de", "key": " Desktop" },
+    { "type": "terminal", "key": " Terminal" },
+    { "type": "cpu", "key": " CPU" },
+    { "type": "gpu", "key": "󰍹 GPU" },
+    { "type": "memory", "key": " Memory" },
+    { "type": "disk", "key": "󰋊 Disk", "folders": "/" },
+    {
+      "type": "command",
+      "key": "󰊗 Mode",
+      "text": "fernos-mode status 2>/dev/null | sed 's/^game$/Game Mode/; s/^work$/Work Mode/; s/^normal$/Normal/'"
+    },
+    "break",
+    { "type": "colors", "symbol": "circle" }
+  ]
+}

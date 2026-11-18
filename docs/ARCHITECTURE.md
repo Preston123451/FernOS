@@ -128,3 +128,12 @@ Node.js/npm, clang, cmake, gdb, base-devel. Gaming: Steam, Lutris, Heroic, Disco
 MangoHud, GameMode, Flatpak (for Sober). Software center: Shelly. Fern ecosystem:
 `fern` and `fernblox` packages. Compressed RAM swap via `zram-generator`
 (`/etc/systemd/zram-generator.conf`: half of RAM, max 8 GiB, zstd).
+
+## ADR-14: Terminal welcome = fastfetch with a FernOS tree logo
+Modelled on CachyOS's fish setup, but FernOS-owned: `/etc/fish/conf.d/fernos.fish`
+runs `fastfetch` as the fish greeting using `/etc/xdg/fastfetch/config.jsonc`
+(logo `/usr/share/fernos/fastfetch/fernos-tree.txt`, fern palette, current
+FernOS mode). Konsole uses Hack Nerd Font Mono so the key icons render.
+It does not depend on `cachyos-fish-config`. Users opt out with
+`set -U fernos_quiet 1`, or override via `~/.config/fastfetch/config.jsonc`.
+

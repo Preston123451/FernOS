@@ -168,6 +168,7 @@ plasma-browser-integration
 
 
 ttf-hack
+ttf-hack-nerd
 
 pipewire-jack
 alsa-firmware
@@ -189,6 +190,8 @@ zip
 unrar
 bash-completion
 fastfetch
+eza
+bat
 
 git
 base-devel
