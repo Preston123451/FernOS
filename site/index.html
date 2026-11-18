@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FernOS</title>
+<meta name="description" content="FernOS: a calm KDE Plasma desktop on Arch + CachyOS, built for coding, working and gaming.">
+<link rel="icon" href="fernos.svg" type="image/svg+xml">
+<style>
+  :root {
+    --bg: #F4F1E6; --card: #FBF9F2; --ink: #1E2B22; --muted: #5E6B5A;
+    --moss: #6F8F5A; --moss-dark: #4C6B3E; --line: #DCD8C8; --code: #EAE6D8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #121A15; --card: #18271F; --ink: #EDE8D8; --muted: #A9B39E;
+      --moss: #9BAE7D; --moss-dark: #B8C99A; --line: #2B3B31; --code: #1F3027;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+  header { padding: 56px 0 28px; text-align: center; }
+  header img.logo { width: 96px; height: 96px; }
+  h1 { font-size: 2.8rem; margin: 10px 0 4px; letter-spacing: -0.02em; }
+  .tag { color: var(--muted); font-size: 1.2rem; margin: 0 0 28px; }
+  .btn { display: inline-block; background: var(--moss-dark); color: var(--bg);
+         padding: 14px 28px; border-radius: 12px; font-weight: 650; text-decoration: none;
+         font-size: 1.1rem; }
+  .btn:hover { filter: brightness(1.1); }
+  .btn.ghost { background: transparent; color: var(--moss-dark); border: 2px solid var(--moss); margin-left: 8px; }
+  .meta { color: var(--muted); font-size: .92rem; margin-top: 12px; }
+  .shot { display: block; width: 100%; border-radius: 14px; border: 1px solid var(--line);
+          box-shadow: 0 18px 50px rgba(0,0,0,.18); margin: 24px 0 48px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px 22px; }
+  .card h3 { margin: 0 0 6px; font-size: 1.1rem; }
+  .card p { margin: 0; color: var(--muted); font-size: .97rem; }
+  h2 { margin: 56px 0 14px; font-size: 1.7rem; }
+  ol li { margin-bottom: 10px; }
+  pre { background: var(--code); border-radius: 10px; padding: 12px 14px; overflow-x: auto;
+        font: 14px/1.5 ui-monospace, "Hack", monospace; margin: 8px 0; }
+  code { font-family: ui-monospace, "Hack", monospace; background: var(--code); padding: 1px 5px; border-radius: 5px; }
+  pre code { background: none; padding: 0; }
+  .note { border-left: 4px solid var(--moss); padding: 4px 0 4px 14px; color: var(--muted); }
+  footer { color: var(--muted); text-align: center; padding: 56px 0 40px; font-size: .9rem; }
+  a { color: var(--moss-dark); }
+  @media (max-width: 560px) { h1 { font-size: 2.2rem; } .btn.ghost { margin: 10px 0 0; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img class="logo" src="fernos.svg" alt="FernOS logo">
+    <h1>FernOS</h1>
+    <p class="tag">A calm desktop for coding, working and gaming.</p>
+    <a class="btn" href="#download">Download FernOS</a>
+    <a class="btn ghost" href="https://github.com/OWNER/FernOS">Source code</a>
+    <p class="meta">Version 0.2 · 64-bit PC (x86-64) · about 3.7 GB · free</p>
+  </header>
+
+  <img class="shot" src="desktop.webp" alt="The FernOS desktop: cream and green wallpaper with a fern, and a panel of apps">
+
+  <div class="grid">
+    <div class="card"><h3>🎮 Game Mode</h3><p>One click: performance CPU, Feral GameMode, effects off and a night theme. Steam, Lutris, Heroic, Discord and MangoHud included.</p></div>
+    <div class="card"><h3>💼 Work Mode</h3><p>A calm theme, a quieter CPU and a built-in 25/5 focus timer.</p></div>
+    <div class="card"><h3>💻 Ready to code</h3><p>VS Code (Code-OSS), Claude Code, git, Python, Rust, Node.js and C/C++ compilers. Fish shell with a FernOS welcome screen.</p></div>
+    <div class="card"><h3>🌐 Zen Browser</h3><p>Zen is the default browser, with Fern and Fernblox preinstalled too.</p></div>
+    <div class="card"><h3>⚡ Arch + CachyOS</h3><p>KDE Plasma on Arch Linux with the fast CachyOS kernel and repositories. Runs on any 64-bit PC.</p></div>
+    <div class="card"><h3>🟩 NVIDIA ready</h3><p>Includes the NVIDIA driver for GTX 900/10-series up to RTX 40-series. It's removed automatically on PCs without NVIDIA.</p></div>
+  </div>
+
+  <h2 id="download">Download</h2>
+  <p>GitHub limits each file to 2 GB, so the ISO comes in two parts. Download both, then join them.</p>
+  <p>
+    <a class="btn" href="https://github.com/OWNER/FernOS/releases/latest/download/fernos-x86_64.iso.part1">Part 1</a>
+    <a class="btn" href="https://github.com/OWNER/FernOS/releases/latest/download/fernos-x86_64.iso.part2">Part 2</a>
+    <a class="btn ghost" href="https://github.com/OWNER/FernOS/releases/latest/download/fernos-x86_64.iso.sha256">Checksum</a>
+  </p>
+  <p><strong>Join on Linux or macOS</strong> (in the folder you downloaded to):</p>
+  <pre><code>cat fernos-x86_64.iso.part1 fernos-x86_64.iso.part2 &gt; fernos-x86_64.iso
+sha256sum -c fernos-x86_64.iso.sha256</code></pre>
+  <p><strong>Join on Windows</strong> (Command Prompt, in your Downloads folder):</p>
+  <pre><code>copy /b fernos-x86_64.iso.part1 + fernos-x86_64.iso.part2 fernos-x86_64.iso</code></pre>
+
+  <h2>Install</h2>
+  <ol>
+    <li>Write <code>fernos-x86_64.iso</code> to a USB stick of 8 GB or more with
+      <a href="https://etcher.balena.io/">balenaEtcher</a>, <a href="https://rufus.ie/">Rufus</a> (Windows) or KDE ISO Image Writer.
+      This erases the USB stick.</li>
+    <li>Restart with the stick plugged in and open your PC's boot menu (often <b>F11</b>, <b>F12</b>, <b>F8</b> or <b>Esc</b>), then choose the USB stick.</li>
+    <li>FernOS starts as a live system. Nothing changes on your PC until you double-click <b>Install FernOS</b>.</li>
+    <li>The installer works offline. Choosing <b>Erase disk</b> wipes the drive you pick, so back up first.</li>
+  </ol>
+  <p class="note">FernOS is a hobby project in development (0.2). It is tested in virtual machines on UEFI and BIOS. Use it at your own risk.
+    Live session: user <code>fern</code>, no password.</p>
+
+  <footer>FernOS is built from Arch Linux, CachyOS and KDE Plasma packages. It isn't affiliated with any of them.</footer>
+</div>
+</body>
+</html>
