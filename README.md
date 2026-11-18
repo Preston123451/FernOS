@@ -1,26 +1,67 @@
-# FernOS
+<p align="center"><img src="site/fernos.svg" width="96" alt="FernOS logo"></p>
 
-**A calmer way to use the internet.**
+<h1 align="center">FernOS</h1>
 
-FernOS is an Arch Linux–based desktop operating system in the Fern software
-ecosystem: KDE Plasma with a natural, quiet look (cream, beige and muted
-green), built for **coding, working and gaming**. It uses Arch plus the
-CachyOS repositories (fast `linux-cachyos` kernel, generic x86-64 builds that
-run on any 64-bit PC) and is built reproducibly with
-[archiso](https://wiki.archlinux.org/title/Archiso).
+<p align="center"><b>A calm desktop for coding, working and gaming.</b><br>
+<a href="https://preston123451.github.io/FernOS/"><b>⬇ Download FernOS</b></a> ·
+<a href="https://github.com/Preston123451/FernOS/releases/latest">Releases</a></p>
 
-* **Game Mode / Work Mode**: one click in the panel (performance CPU + GameMode +
-  effects off + night theme, or calm theme + focus timer + quiet CPU).
-* **Zen Browser**, Code-OSS, Claude Code, Steam, Lutris, Heroic, Discord,
-  MangoHud, Shelly, Fern and Fernblox preinstalled; fish shell.
-* **NVIDIA driver included** (580xx: GTX 900/10-series up to RTX 40), kept only on PCs with an NVIDIA card.
-* **Terminal welcome** like CachyOS's: a FernOS tree logo + system info (fastfetch), `ls`/`ll`/`lt` with icons, `update`, `game`/`work`/`normal`.
-* **Graphical installer** (Calamares): installs the live system as-is, no internet needed.
+<p align="center"><img src="site/desktop.webp" width="720" alt="The FernOS desktop"></p>
 
-> **Status: 0.2, in development.** See [docs/ROADMAP.md](docs/ROADMAP.md) and the honest test status
-> in [docs/TESTING.md](docs/TESTING.md).
+## What is FernOS?
 
-## Quick start
+FernOS is a free Linux operating system that you can run on any 64-bit PC, in
+place of or next to Windows. It's built on **Arch Linux** and **CachyOS** (a
+fast kernel tuned for desktops) with the **KDE Plasma** desktop and a quiet
+look: cream, beige and muted green. It works out of the box: everything below is
+already installed.
+
+* 🎮 **Game Mode**: one click in the panel gives you a performance CPU, Feral
+  GameMode, desktop effects off and a night theme. **Steam, Lutris, Heroic,
+  Discord and MangoHud** are included.
+* 💼 **Work Mode**: a calm theme, a quieter CPU (power-saver on battery) and a
+  built-in 25/5 focus timer. **Normal** puts your own theme back.
+* 💻 **Ready to code**: VS Code (Code-OSS), Claude Code, git, Python, Rust,
+  Node.js and C/C++ compilers. The **fish** shell has a FernOS tree welcome screen,
+  `ls` with icons and an `update` shortcut.
+* 🌐 **Zen Browser** is the default browser. **Fern** and **Fernblox** are preinstalled.
+* 🟩 **NVIDIA driver included** for GTX 900/10-series up to RTX 40-series. It's
+  removed automatically on PCs without an NVIDIA card.
+* 🧭 **Easy graphical installer** that works offline, for UEFI and older BIOS PCs.
+
+## Download and install
+
+1. Go to the **[download page](https://preston123451.github.io/FernOS/)** or the
+   [latest release](https://github.com/Preston123451/FernOS/releases/latest) and
+   download **both parts** (`fernos-x86_64.iso.part1` and `.part2`). GitHub
+   limits files to 2 GB, so the 3.7 GB ISO is split in two.
+2. Join the parts into one ISO file:
+   * **Windows** (Command Prompt, in your Downloads folder):
+     `copy /b fernos-x86_64.iso.part1 + fernos-x86_64.iso.part2 fernos-x86_64.iso`
+   * **Linux / macOS**:
+     `cat fernos-x86_64.iso.part1 fernos-x86_64.iso.part2 > fernos-x86_64.iso`
+3. Write `fernos-x86_64.iso` to a USB stick of 8 GB or more with
+   [balenaEtcher](https://etcher.balena.io/), [Rufus](https://rufus.ie/) or KDE
+   ISO Image Writer. This erases the USB stick.
+4. Restart with the stick plugged in, open the boot menu (often **F11**, **F12**,
+   **F8** or **Esc**) and choose the USB stick.
+5. FernOS starts as a **live system**, so you can try it without changing your PC.
+   To install, double-click **Install FernOS** on the desktop. Choosing *Erase disk*
+   wipes the drive you pick, so back up first.
+
+**Requirements:** 64-bit PC, 2 GB RAM (8 GB+ for gaming), 30 GB of disk space.
+
+> **Status: 0.2, a hobby project in development.** It is tested in virtual machines
+> (UEFI and BIOS install). See [docs/TESTING.md](docs/TESTING.md) and
+> [docs/ROADMAP.md](docs/ROADMAP.md). Use it at your own risk.
+
+---
+
+## For developers: build it yourself
+
+FernOS is built reproducibly with [archiso](https://wiki.archlinux.org/title/Archiso)
+from Arch + CachyOS (generic x86-64) packages.
+
 
 ```sh
 ./scripts/check.sh        # static checks, no root needed
