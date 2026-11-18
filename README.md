@@ -4,7 +4,7 @@
 
 <p align="center"><b>A calm desktop for coding, working and gaming.</b><br>
 <a href="https://preston123451.github.io/FernOS/"><b>⬇ Download FernOS</b></a> ·
-<a href="https://github.com/Preston123451/FernOS/releases/latest">Releases</a></p>
+<a href="https://archive.org/details/fernos">Internet Archive</a></p>
 
 <p align="center"><img src="site/desktop.webp" width="720" alt="The FernOS desktop"></p>
 
@@ -31,16 +31,11 @@ already installed.
 
 ## Download and install
 
-1. Go to the **[download page](https://preston123451.github.io/FernOS/)** or the
-   [latest release](https://github.com/Preston123451/FernOS/releases/latest) and
-   download **both parts** (`fernos-x86_64.iso.part1` and `.part2`). GitHub
-   limits files to 2 GB, so the 3.9 GB ISO is split in two.
-2. Join the parts into one ISO file:
-   * **Windows** (Command Prompt, in your Downloads folder):
-     `copy /b fernos-x86_64.iso.part1 + fernos-x86_64.iso.part2 fernos-x86_64.iso`
-   * **Linux / macOS**:
-     `cat fernos-x86_64.iso.part1 fernos-x86_64.iso.part2 > fernos-x86_64.iso`
-3. Write `fernos-x86_64.iso` to a USB stick of 8 GB or more with
+1. **[Download FernOS 0.2 (ISO, 3.9 GB)](https://archive.org/download/fernos/fernos-0.2-x86_64.iso)**, one file hosted by the
+   Internet Archive. More info is on the [download page](https://preston123451.github.io/FernOS/).
+2. *(Optional)* Check the download: its SHA-256 is
+   `88995a5493603aa934736c4b586f9dfe0422dff027192b0440b1b915d6af85a9`.
+3. Write `fernos-0.2-x86_64.iso` to a USB stick of 8 GB or more with
    [balenaEtcher](https://etcher.balena.io/), [Rufus](https://rufus.ie/) or KDE
    ISO Image Writer. This erases the USB stick.
 4. Restart with the stick plugged in, open the boot menu (often **F11**, **F12**,

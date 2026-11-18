@@ -55,7 +55,7 @@
     <img class="logo" src="fernos.svg" alt="FernOS logo">
     <h1>FernOS</h1>
     <p class="tag">A calm desktop for coding, working and gaming.</p>
-    <a class="btn" href="#download">Download FernOS</a>
+    <a class="btn" href="https://archive.org/download/fernos/fernos-0.2-x86_64.iso">⬇ Download FernOS</a>
     <a class="btn ghost" href="https://github.com/OWNER/FernOS">Source code</a>
     <p class="meta">Version 0.2 · 64-bit PC (x86-64) · about 3.9 GB · free</p>
   </header>
@@ -75,21 +75,14 @@
   <img class="shot" style="margin-top:8px" src="terminal.webp" alt="Konsole showing the FernOS tree logo and system information">
 
   <h2 id="download">Download</h2>
-  <p>GitHub limits each file to 2 GB, so the ISO comes in two parts. Download both, then join them.</p>
-  <p>
-    <a class="btn" href="https://github.com/OWNER/FernOS/releases/latest/download/fernos-x86_64.iso.part1">Part 1</a>
-    <a class="btn" href="https://github.com/OWNER/FernOS/releases/latest/download/fernos-x86_64.iso.part2">Part 2</a>
-    <a class="btn ghost" href="https://github.com/OWNER/FernOS/releases/latest/download/fernos-x86_64.iso.sha256">Checksum</a>
-  </p>
-  <p><strong>Join on Linux or macOS</strong> (in the folder you downloaded to):</p>
-  <pre><code>cat fernos-x86_64.iso.part1 fernos-x86_64.iso.part2 &gt; fernos-x86_64.iso
-sha256sum -c fernos-x86_64.iso.sha256</code></pre>
-  <p><strong>Join on Windows</strong> (Command Prompt, in your Downloads folder):</p>
-  <pre><code>copy /b fernos-x86_64.iso.part1 + fernos-x86_64.iso.part2 fernos-x86_64.iso</code></pre>
+  <p>One file, about 3.9 GB. Hosted for free by the <a href="https://archive.org/details/fernos">Internet Archive</a>.</p>
+  <p><a class="btn" href="https://archive.org/download/fernos/fernos-0.2-x86_64.iso">⬇ Download FernOS 0.2 (ISO)</a></p>
+  <p class="meta" style="text-align:left">SHA-256 (optional check): <code style="word-break:break-all">88995a5493603aa934736c4b586f9dfe0422dff027192b0440b1b915d6af85a9</code></p>
+  <p>Linux: <code>sha256sum fernos-0.2-x86_64.iso</code> · Windows (PowerShell): <code>Get-FileHash fernos-0.2-x86_64.iso</code></p>
 
   <h2>Install</h2>
   <ol>
-    <li>Write <code>fernos-x86_64.iso</code> to a USB stick of 8 GB or more with
+    <li>Write <code>fernos-0.2-x86_64.iso</code> to a USB stick of 8 GB or more with
       <a href="https://etcher.balena.io/">balenaEtcher</a>, <a href="https://rufus.ie/">Rufus</a> (Windows) or KDE ISO Image Writer.
       This erases the USB stick.</li>
     <li>Restart with the stick plugged in and open your PC's boot menu (often <b>F11</b>, <b>F12</b>, <b>F8</b> or <b>Esc</b>), then choose the USB stick.</li>
