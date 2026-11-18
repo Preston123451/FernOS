@@ -10,8 +10,8 @@
 
 ## What is FernOS?
 
-FernOS is a free Linux operating system that you can run on any 64-bit PC, in
-place of or next to Windows. It's built on **Arch Linux** and **CachyOS** (a
+FernOS is a free Linux operating system that you can run on any 64-bit PC.
+It's built on **Arch Linux** and **CachyOS** (a
 fast kernel tuned for desktops) with the **KDE Plasma** desktop and a quiet
 look: cream, beige and muted green. It works out of the box: everything below is
 already installed.
