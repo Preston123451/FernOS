@@ -2,7 +2,7 @@
 # Static checks that need no root and no VM. Run before every ISO build.
 #   1. Shell/JSON syntax of project files
 #   2. Every package in packages.x86_64 (and all dependencies) resolves against
-#      Arch [core]/[extra] + the local [fernos] repo
+#      CachyOS [cachyos] + Arch [core]/[extra]/[multilib] + the local [fernos] repo
 #   3. Every systemd unit enabled in the live image is shipped by a listed package
 #   4. FernOS packages don't overwrite files owned by Arch packages
 set -uo pipefail
@@ -24,7 +24,7 @@ while IFS= read -r -d '' f; do
     python3 -m json.tool "$f" >/dev/null 2>&1 && ok "${f#"${repo_root}/"}" || bad "invalid JSON: ${f#"${repo_root}/"}"
 done < <(find "${repo_root}/desktop" -name '*.json' -print0)
 
-echo ":: Package resolution (Arch repos + local [fernos])"
+echo ":: Package resolution (CachyOS + Arch repos + local [fernos])"
 [[ -f "${repo_root}/build/repo/fernos.db.tar.zst" ]] || "${repo_root}/scripts/build-packages.sh" >/dev/null
 sed "s|^Include = /etc/pacman.d/mirrorlist|Include = /etc/pacman.d/mirrorlist|" "${profile}/pacman.conf" >"${tmp}/pacman.conf"
 printf '\n[fernos]\nSigLevel = Optional TrustAll\nServer = file://%s\n' "${repo_root}/build/repo" >>"${tmp}/pacman.conf"
