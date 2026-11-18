@@ -15,7 +15,7 @@
   "display": {
     "separator": "  ",
     "color": { "keys": "38;2;155;174;125", "title": "38;2;201;214;160", "separator": "38;2;120;134;116" },
-    "key": { "width": 11 }
+    "key": { "width": 12 }
   },
   "modules": [
     {

@@ -34,7 +34,7 @@ already installed.
 1. Go to the **[download page](https://preston123451.github.io/FernOS/)** or the
    [latest release](https://github.com/Preston123451/FernOS/releases/latest) and
    download **both parts** (`fernos-x86_64.iso.part1` and `.part2`). GitHub
-   limits files to 2 GB, so the 3.7 GB ISO is split in two.
+   limits files to 2 GB, so the 3.9 GB ISO is split in two.
 2. Join the parts into one ISO file:
    * **Windows** (Command Prompt, in your Downloads folder):
      `copy /b fernos-x86_64.iso.part1 + fernos-x86_64.iso.part2 fernos-x86_64.iso`
