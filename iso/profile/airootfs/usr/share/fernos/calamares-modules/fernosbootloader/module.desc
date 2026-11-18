@@ -1,0 +1,8 @@
+# FernOS: records GRUB as the boot loader choice. CachyOS's grubcfg module only
+# runs when globalstorage "packagechooser_bootloader" == "grub", which normally
+# comes from a boot-loader chooser page that FernOS doesn't show.
+---
+type:       "job"
+name:       "fernosbootloader"
+interface:  "python"
+script:     "main.py"

@@ -10,7 +10,7 @@ pkgrel=1
 pkgdesc="FernOS branding, Plasma/Konsole/SDDM defaults and system presets"
 arch=('any')
 license=('GPL-2.0-or-later')
-depends=('plasma-desktop' 'breeze' 'konsole' 'sddm' 'ttf-hack')
+depends=('plasma-desktop' 'breeze' 'konsole' 'sddm' 'ttf-hack' 'kwallet-pam')
 optdepends=('fish: FernOS prompt and colors'
             'ufw: firewall enabled by default on install')
 conflicts=('deepin-kwin')  # also ships /etc/xdg/kdeglobals and /etc/xdg/kwinrc
@@ -22,6 +22,7 @@ backup=('etc/xdg/kdeglobals'
         'etc/xdg/dolphinrc'
         'etc/sddm.conf.d/20-fernos-theme.conf'
         'etc/xdg/mimeapps.list'
+        'etc/xdg/kwalletrc'
         'usr/share/sddm/themes/breeze/theme.conf.user')
 
 _repo="$(realpath "${startdir}/../..")"

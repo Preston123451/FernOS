@@ -93,6 +93,11 @@ def send_keys(q, names, hold=80):
     q.cmd("send-key", keys=[{"type": "qcode", "data": n} for n in names], **{"hold-time": hold})
 
 
+def key_event(q, name, down):
+    q.cmd("input-send-event", events=[
+        {"type": "key", "data": {"down": down, "key": {"type": "qcode", "data": name}}}])
+
+
 def move(q, x, y):
     w, h = screen_size()
     q.cmd("input-send-event", events=[
@@ -120,8 +125,15 @@ def main(argv):
         SIZE_FILE.write_text(f"{w} {h}")
         print(f"{out} {w}x{h}")
     elif op == "type":
+        # Explicit key down/up events, one character at a time: send-key with a
+        # hold time drops keys when calls overlap on a busy guest.
         for ch in " ".join(args):
-            send_keys(q, keys_for(ch), hold=40)
+            names = keys_for(ch)
+            for n in names:
+                key_event(q, n, True)
+            time.sleep(0.02)
+            for n in reversed(names):
+                key_event(q, n, False)
             time.sleep(0.03)
     elif op == "key":
         for combo in args:

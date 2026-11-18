@@ -30,7 +30,7 @@ tasks.writeConfig("launchers", [
     "applications:code-oss.desktop",
     "applications:steam.desktop",
     "applications:fernblox.desktop",
-    "applications:org.kde.systemsettings.desktop"
+    "applications:systemsettings.desktop"
 ]);
 
 // One-click Game Mode / Work Mode switcher (fernos-modes).

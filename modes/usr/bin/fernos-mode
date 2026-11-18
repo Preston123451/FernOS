@@ -239,7 +239,7 @@ def menu():
     if not shutil.which("kdialog"):
         print("kdialog is not installed; use: fernos-mode game|work|normal", file=sys.stderr)
         return 1
-    args = ["kdialog", "--title", "FernOS Modes", "--icon", "fernos",
+    args = ["kdialog", "--title", "FernOS Modes", "--icon", "fernos", "--geometry", "620x300",
             "--radiolist", "Choose how FernOS should behave:"]
     descriptions = {
         "game": "🎮  Game Mode: max performance, effects off, night theme",

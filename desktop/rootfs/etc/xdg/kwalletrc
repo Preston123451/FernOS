@@ -1,0 +1,7 @@
+# FernOS: the "kdewallet" wallet is created/unlocked with your login password at
+# login (kwallet-pam), so apps that save passwords never show a wallet setup wizard.
+[Wallet]
+Enabled=true
+First Use=false
+Default Wallet=kdewallet
+Use One Wallet=true

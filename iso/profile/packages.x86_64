@@ -235,6 +235,7 @@ zram-generator
 shelly
 kdialog
 libnotify
+kwallet-pam
 # --- FernOS / Fern apps (local [fernos] repo) ---
 fernos-modes
 fern
