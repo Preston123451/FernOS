@@ -4,12 +4,18 @@
 
 FernOS is an Arch Linux–based desktop operating system in the Fern software
 ecosystem: KDE Plasma with a natural, quiet look (cream, beige and muted
-green) and sensible defaults. It is built reproducibly with
-[archiso](https://wiki.archlinux.org/title/Archiso) from the official Arch
-repositories, so it does not depend on the machine it is built on.
+green), built for **coding, working and gaming**. It uses Arch plus the
+CachyOS repositories (fast `linux-cachyos` kernel, generic x86-64 builds that
+run on any 64-bit PC) and is built reproducibly with
+[archiso](https://wiki.archlinux.org/title/Archiso).
 
-> **Status: 0.1 (Foundation), in development.** The live ISO is not yet
-> installable. See [docs/ROADMAP.md](docs/ROADMAP.md) and the honest test status
+* **Game Mode / Work Mode**: one click in the panel (performance CPU + GameMode +
+  effects off + night theme, or calm theme + focus timer + quiet CPU).
+* **Zen Browser**, Code-OSS, Claude Code, Steam, Lutris, Heroic, Discord,
+  MangoHud, Shelly, Fern and Fernblox preinstalled; fish shell.
+* **Graphical installer** (Calamares): installs the live system as-is, no internet needed.
+
+> **Status: 0.2, in development.** See [docs/ROADMAP.md](docs/ROADMAP.md) and the honest test status
 > in [docs/TESTING.md](docs/TESTING.md).
 
 ## Quick start

@@ -7,13 +7,15 @@
 #                                           # missing) as an install target
 #   ./scripts/test-vm.sh --boot-disk        # boot the installed system from that disk image
 #   ./scripts/test-vm.sh --iso path/to.iso
+#   ./scripts/test-vm.sh --headless         # no window; control it with scripts/vm-ctl.py
+#                                           # (screenshots, typing, clicks) over QMP
 #
 # Requires: qemu-desktop (or qemu-full), edk2-ovmf for UEFI.
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 vm_dir="${repo_root}/build/vm"
-iso="" mode=uefi disk=0 boot_disk=0 mem="${FERNOS_VM_MEM:-4096}" cpus="${FERNOS_VM_CPUS:-4}"
+iso="" mode=uefi disk=0 boot_disk=0 headless=0 mem="${FERNOS_VM_MEM:-4096}" cpus="${FERNOS_VM_CPUS:-4}"
 
 while (( $# )); do
     case "$1" in
@@ -22,7 +24,8 @@ while (( $# )); do
         --disk) disk=1 ;;
         --boot-disk) disk=1 boot_disk=1 ;;
         --iso) iso="$2"; shift ;;
-        -h|--help) sed -n '2,13p' "$0"; exit 0 ;;
+        --headless) headless=1 ;;
+        -h|--help) sed -n '2,15p' "$0"; exit 0 ;;
         *) echo "unknown option: $1" >&2; exit 1 ;;
     esac
     shift
@@ -54,11 +57,24 @@ if [[ "${mode}" == uefi ]]; then
 fi
 
 if (( disk )); then
-    [[ -f "${vm_dir}/disk.qcow2" ]] || qemu-img create -f qcow2 "${vm_dir}/disk.qcow2" 20G
+    [[ -f "${vm_dir}/disk.qcow2" ]] || qemu-img create -f qcow2 "${vm_dir}/disk.qcow2" 40G
     args+=(-drive "file=${vm_dir}/disk.qcow2,if=virtio,format=qcow2")
 fi
 if (( ! boot_disk )); then
     args+=(-drive "file=${iso},media=cdrom,readonly=on" -boot order=d)
+fi
+
+if (( headless )); then
+    # Swap the GTK window for a QMP socket + serial log (see scripts/vm-ctl.py).
+    for i in "${!args[@]}"; do
+        case "${args[i]}" in
+            virtio-vga-gl) args[i]=virtio-vga ;;
+            gtk,gl=on) args[i]=none ;;
+        esac
+    done
+    rm -f -- "${vm_dir}/qmp.sock"
+    args+=(-qmp "unix:${vm_dir}/qmp.sock,server,nowait" -serial "file:${vm_dir}/serial.log")
+    args=("${args[@]/pipewire,id=snd0/none,id=snd0}")
 fi
 
 echo ":: ${mode^^} boot${iso:+ of ${iso}}"

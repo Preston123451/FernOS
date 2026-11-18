@@ -1,0 +1,38 @@
+# Maintainer: FernOS Project
+#
+# Fernblox: Roblox library/discovery/friends launcher that plays games through Sober.
+# Built from the committed HEAD of the Fernblox git repository
+# (default ../Fernblox next to FernOS; override with FERNBLOX_SRC=/path).
+
+pkgname=fernblox
+pkgver=0.5.0
+pkgrel=1
+pkgdesc="Fernblox: Roblox game library and launcher for Linux (plays through Sober)"
+arch=('any')
+license=('LicenseRef-Fern')
+depends=('python' 'pyside6' 'python-requests' 'python-keyring' 'flatpak' 'hicolor-icon-theme')
+optdepends=('kwallet: remember your Roblox login (Secret Service)')
+
+_repo="$(realpath "${startdir}/../..")"
+_src="${FERNBLOX_SRC:-$(realpath -m "${_repo}/../Fernblox")}"
+
+package() {
+    [[ -d "${_src}/.git" ]] || { echo "Fernblox source not found at ${_src}" >&2; return 1; }
+    install -d "${pkgdir}/usr/share/fernblox"
+    git -C "${_src}" archive --format=tar HEAD main.py core account ui packaging \
+        | tar -x -C "${pkgdir}/usr/share/fernblox"
+
+    install -Dm755 /dev/stdin "${pkgdir}/usr/bin/fernblox" <<'SH'
+#!/bin/sh
+exec python3 /usr/share/fernblox/main.py "$@"
+SH
+    install -Dm644 "${pkgdir}/usr/share/fernblox/packaging/fernblox.desktop" \
+        "${pkgdir}/usr/share/applications/fernblox.desktop"
+    install -Dm644 "${pkgdir}/usr/share/fernblox/packaging/fernblox.svg" \
+        "${pkgdir}/usr/share/icons/hicolor/scalable/apps/fernblox.svg"
+    rm -f "${pkgdir}/usr/share/fernblox/packaging/"{install,uninstall}.sh
+
+    python3 -m compileall -q -d /usr/share/fernblox "${pkgdir}/usr/share/fernblox"
+    find "${pkgdir}/usr/share" -type d -exec chmod 0755 {} +
+    find "${pkgdir}/usr/share" -type f -exec chmod 0644 {} +
+}

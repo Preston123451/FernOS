@@ -1,0 +1,42 @@
+# Maintainer: FernOS Project
+#
+# Fern: a calmer way to use your desktop (dashboard, launcher, notes, monitor).
+# Built from the committed HEAD of the Fern git repository
+# (default ../Fern next to FernOS; override with FERN_SRC=/path).
+
+pkgname=fern
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Fern: a calmer way to use your desktop"
+arch=('any')
+license=('LicenseRef-Fern')
+depends=('python' 'pyside6' 'python-psutil' 'hicolor-icon-theme')
+optdepends=('python-nvidia-ml-py: NVIDIA GPU statistics')
+
+_repo="$(realpath "${startdir}/../..")"
+_src="${FERN_SRC:-$(realpath -m "${_repo}/../Fern")}"
+
+package() {
+    [[ -d "${_src}/.git" ]] || { echo "Fern source not found at ${_src}" >&2; return 1; }
+    install -d "${pkgdir}/usr/share/fern"
+    git -C "${_src}" archive --format=tar HEAD main.py fern assets \
+        | tar -x -C "${pkgdir}/usr/share/fern"
+
+    install -Dm755 /dev/stdin "${pkgdir}/usr/bin/fern" <<'SH'
+#!/bin/sh
+exec python3 /usr/share/fern/main.py "$@"
+SH
+    git -C "${_src}" show HEAD:packaging/linux/app.fern.Fern.desktop \
+        | install -Dm644 /dev/stdin "${pkgdir}/usr/share/applications/app.fern.Fern.desktop"
+    git -C "${_src}" show HEAD:packaging/linux/app.fern.Fern.metainfo.xml \
+        | install -Dm644 /dev/stdin "${pkgdir}/usr/share/metainfo/app.fern.Fern.metainfo.xml"
+    local size
+    for size in 16x16 24x24 32x32 48x48 64x64 128x128 256x256 512x512; do
+        git -C "${_src}" show "HEAD:packaging/icons/hicolor/${size}/apps/fern.png" \
+            | install -Dm644 /dev/stdin "${pkgdir}/usr/share/icons/hicolor/${size}/apps/app.fern.Fern.png"
+    done
+
+    python3 -m compileall -q -d /usr/share/fern "${pkgdir}/usr/share/fern"
+    find "${pkgdir}/usr/share" -type d -exec chmod 0755 {} +
+    find "${pkgdir}/usr/share" -type f -exec chmod 0644 {} +
+}

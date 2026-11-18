@@ -7,13 +7,21 @@ The project started as a copy of archiso's `releng` profile with FernOS changes
 (baseline commit `da02f8b`). We keep that structure so upstream archiso fixes
 can be diffed and merged: `diff -r /usr/share/archiso/configs/releng iso/profile`.
 
-## ADR-2: Only official Arch repositories, dedicated package cache
-`iso/profile/pacman.conf` lists only `[core]` and `[extra]`. `scripts/build-iso.sh`
-adds the local `[fernos]` repo and a **dedicated package cache** (`build/cache`)
-at build time. The build host is CachyOS, whose cache holds CachyOS rebuilds
-of Arch packages; the separate cache keeps them out of the ISO. The
-mirrorlist defaults to the host's `/etc/pacman.d/mirrorlist` (override with
-`FERNOS_MIRRORLIST=...`). `SOURCE_DATE_EPOCH` is the last commit time.
+## ADR-2: Arch + CachyOS (generic x86-64) repositories, dedicated package cache
+*Changed in 0.2 (was: official Arch repositories only).*
+`iso/profile/pacman.conf` lists **`[cachyos]`** first, then Arch `[core]`, `[extra]`
+and `[multilib]` (Steam needs 32-bit libraries). Only the **generic x86-64**
+`[cachyos]` repo is used, never `cachyos-v3`/`v4`, so FernOS boots on any 64-bit
+PC, not just CPUs with AVX2. CachyOS provides the `linux-cachyos` kernel,
+Calamares, Zen Browser, Shelly, Claude Code and Heroic as ready-made packages.
+`airootfs/etc/pacman.conf` carries the same repos into the live and installed
+systems, so updates keep coming from CachyOS (with `cachyos-keyring` and
+`cachyos-mirrorlist`).
+`scripts/build-iso.sh` adds the local `[fernos]` repo and a **dedicated package
+cache** (`build/cache`) at build time, so the host's CachyOS v3 builds never end
+up in the image. Building requires the CachyOS keyring and
+`/etc/pacman.d/cachyos-mirrorlist` on the build host (true on CachyOS).
+`SOURCE_DATE_EPOCH` is the last commit time.
 
 ## ADR-3: Desktop defaults ship as a package, not as live-ISO files
 Branding and desktop defaults (`desktop/rootfs`, `branding/dist`) are packaged
@@ -32,7 +40,8 @@ changes are never overwritten.
 `/etc/xdg/kdeglobals` sets `LookAndFeelPackage=org.fernos.desktop`. On a user's
 first login, plasmashell builds the panel and desktop from that package's
 `layouts/org.kde.plasma.desktop-layout.js`: a bottom floating panel, the Fern
-launcher icon, Dolphin/Firefox/Konsole/Settings pinned, and the Fern wallpaper.
+launcher icon, Dolphin/Zen/Konsole/Code/Steam/Fernblox/Settings pinned, the FernOS Modes
+button, and the Fern wallpaper.
 Splash, lock screen and logout screens fall back to Breeze. The Breeze splash
 is disabled (`ksplashrc`) until FernOS has its own.
 
@@ -78,3 +87,38 @@ desktop fallback. The SDDM greeter itself runs on X11 (sddm depends on xorg-serv
 ## ADR-10: Live user shell is fish
 Kept from the existing work (`20-fernos-user.hook`). FernOS ships a system-wide
 fish prompt and colors in `/etc/fish/`; users override them in `~/.config/fish`.
+
+## ADR-11: Installer = Calamares, offline (copy the live system)
+CachyOS's `cachyos-calamares` with FernOS's own configuration in
+`iso/profile/airootfs/etc/calamares` (live ISO only). The `unpackfs` module copies
+the live squashfs, so the installed system is exactly the live system: same apps,
+same look, no internet needed. `shellprocess@cleanup` then removes every live-only
+file (NOPASSWD sudo, polkit rule, autologin, archiso hooks and services, live skel
+tweaks), initialises the pacman keyring and uninstalls Calamares. The user is
+created fresh with **fish** as shell and in the `gamemode` group; the root password
+reuses the user's. Boot loader: **GRUB** on both UEFI and BIOS (with os-prober for
+dual boot). Default file system btrfs, no swap partition (zram instead, ADR-13).
+Every disk change stays behind Calamares' summary/confirmation page.
+
+## ADR-12: Game Mode / Work Mode = `fernos-modes`
+`fernos-mode game|work|normal` (Python, per user, no root):
+* **Game:** `powerprofilesctl set performance` (falls back to balanced if the CPU
+  has no performance profile), Feral GameMode held active by the user unit
+  `fernos-gamemode.service` (`gamemoded -r`), blur/contrast/sliding-popup/translucency
+  effects and animations off, FernDark colors, *Fern Night* wallpaper.
+* **Work:** balanced CPU (power-saver on battery), effects back, FernLight colors,
+  *Fern Mist* wallpaper, Pomodoro timer `fernos-focus.service` (25/5, long break every 4th).
+* **Normal:** undoes everything; the user's own color scheme, wallpaper and effect
+  settings were saved in `~/.local/state/fernos/mode.json` on leaving Normal and are restored.
+The panel has a FernOS Modes button (left click: chooser; right click: Game/Work/Normal),
+and each mode is also in the app launcher/KRunner. Plasma 6 on Wayland cannot turn
+compositing off; fullscreen games get direct scan-out automatically, so Game Mode
+switches the expensive effects off instead.
+
+## ADR-13: Default apps and system tweaks
+Browser **Zen** (`zen-browser-bin`, default via `/etc/xdg/mimeapps.list`).
+Coding: Code-OSS (`code`, Open VSX marketplace), Claude Code, git, Python, Rust,
+Node.js/npm, clang, cmake, gdb, base-devel. Gaming: Steam, Lutris, Heroic, Discord,
+MangoHud, GameMode, Flatpak (for Sober). Software center: Shelly. Fern ecosystem:
+`fern` and `fernblox` packages. Compressed RAM swap via `zram-generator`
+(`/usr/lib/systemd/zram-generator.conf`: half of RAM, max 8 GiB, zstd).
